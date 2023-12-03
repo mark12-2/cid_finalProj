@@ -1,0 +1,33 @@
+<!-- forms to create a new post -->
+<h1 *ngIf="editMode == false">Create Post</h1>
+<h1 *ngIf="editMode == true">Edit Post</h1><br><br>
+
+<form  (ngSubmit)="onsubmit()" [formGroup]="form">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="title">Title</label>
+        <input type="email" class="form-control" id="title" placeholder="" formControlName="title">
+      </div><br>
+      <div class="form-group col-md-6">
+        <label for="image">Image</label>
+        <input type="text" class="form-control" id="image" placeholder="" formControlName="imgPath">
+        <img src="{{form.value.imagPath}}" alt=""><br>
+      </div>
+    </div>
+    <div class="form-group col-md-10">
+      <label for="description">Description</label>
+      <input type="text" class="form-control" id="description" placeholder="" formControlName="description">
+    </div>
+    <!-- <div class="form-group col-md-6">
+      <label for="description2">Author</label>
+      <input type="text" class="form-control" id="description2" placeholder="">
+    </div>
+    <div class="form-group col-md-3">
+        <label for="date">Date</label>
+        <input type="date" class="form-control" id="description2" placeholder="">
+      </div>   -->
+    
+    <br><br>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save</button> |
+    <button type="reset"  class="btn btn-danger" routerLink="/home">Cancel</button>
+  </form>
