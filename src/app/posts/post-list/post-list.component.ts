@@ -12,7 +12,7 @@ import { Post } from 'src/app/post.model';
 export class PostListComponent implements OnInit{
   index = 0;
   listofPosts: Post[]=[];
-  
+   
 
 constructor(private backEndService: BackEndService, private postService: PostService ) {}
 

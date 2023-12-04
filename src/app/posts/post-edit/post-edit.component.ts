@@ -54,33 +54,26 @@ let editImgPath = "";
     }
 
   //submit function  
-    async onsubmit(){
-      const title = this.form.value.title;
-      const imgPath = this.form.value.imgPath;
-      const description = this.form.value.description;
-      const user = await this.authService.getUserId(); // get userId from AuthService
-      // const userName = await this.authService.getUserName(); // get userName from AuthService
-      if (!user ) {
-          console.error('User is not authenticated or user name is not set');
-          return;
-      }
+  async onsubmit(){
+    const title = this.form.value.title;
+    const imgPath = this.form.value.imgPath;
+    const description = this.form.value.description;
+    const ownerId = (await this.authService.getUserId()) || 'defaultOwnerId';
+    const userEmail = (await this.authService.getUserEmail()) || 'default@email.com';
   
-      const post: Post = new Post(
-          title, imgPath, description, new Date(), 0, [], user, user
-      );
-      
-      if(this.editMode == true) {
-        if (post.ownerId !== user) {
-            console.error('You are not the owner of this post');
-            return;
-        }
-        this.backEndService.updateData(this.index, post);
+    const post: Post = new Post(
+      title, imgPath, description, new Date(), 0, [], ownerId, userEmail
+    );
+  
+    if(this.editMode == true) {
+      this.postService.updatePost(this.index, post);
+      this.backEndService.updateData(this.index, post);
     } else {
-        this.backEndService.saveData(post);
-        // this.postService.addPost(post);
+      this.postService.addPost(post);
+      this.backEndService.saveData(post);
     }
-    
-      this.route.navigate(['post-list']);
+  
+    this.route.navigate(['post-list']);
   }
 
 }

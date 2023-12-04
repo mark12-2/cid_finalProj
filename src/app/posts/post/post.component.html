@@ -1,7 +1,7 @@
 <!-- posts shown in home from postlist -->
 <h3>{{post?.title}}</h3>
 <p>{{post?.description}}</p>
-<p><b> Author: </b> {{post?.author}}&nbsp;|&nbsp;{{post?.dateCreated}}</p>
+<p><b> Author: </b> {{post?.userEmail}} &nbsp;|&nbsp;{{post?.dateCreated}}</p>
 <img class="img-responsive" src="{{post?.imgPath}}" width="610px" height="400px">
 <p><br>
     <button type="button" (click)="onClick()" class="btn btn-success">

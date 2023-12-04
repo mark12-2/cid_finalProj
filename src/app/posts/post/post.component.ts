@@ -33,16 +33,13 @@ export class PostComponent implements OnInit{
     
 
     // user restrictions in other functions if not logged in
-    addAComment(commentText: string){
-      if (!this.authService.userLoggedIn) {
-          alert('You must be logged in to add a comment.');
-          return;
-      }
-      if(commentText.trim() !== ''){
+      addAComment(commentText: string){
+        if(commentText.trim() !== ''){
           this.backEndService.addComment(this.index, commentText);
           this.commentText = '';
+        }
       }
-  }
+  
   
       onClick() {
           if (!this.authService.userLoggedIn) {
