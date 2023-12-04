@@ -1,4 +1,4 @@
-export class Post {
+export class Post{
     constructor(
         public title: string, 
         public imgPath: string,
@@ -7,8 +7,7 @@ export class Post {
         public numberOfLikes: number,
         public comments: string[]=[],
         public ownerId: string,
-        public author: string,
-        public id?: string
-    ){
+        public userEmail: string
+    ){             
     }
-}
+} 
