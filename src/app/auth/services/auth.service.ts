@@ -7,10 +7,12 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  userLoggedIn: boolean;      // other components can check on this variable for the login status of the user
+userId: string;  
+userLoggedIn: boolean;      // other components can check on this variable for the login status of the user
 
   constructor(private router: Router, private afAuth: AngularFireAuth) {
       this.userLoggedIn = false;
+      this.userId = ''; // Initialize with an empty string or fetch the userId from source
 
       this.afAuth.onAuthStateChanged((user) => {              // set up a subscription to always know the login status of the user
           if (user) {
@@ -23,7 +25,10 @@ export class AuthService {
 
   loginUser(email: string, password: string): Promise<any> {
     return this.afAuth.signInWithEmailAndPassword(email, password)
-        .then(() => {
+        .then((result) => {
+            if (result.user) {
+                this.userId = result.user.uid; // Set userId here
+            }
             console.log('Auth Service: loginUser: success');
             this.router.navigate(['/home']);
             return null; // return null when login is successful
@@ -32,11 +37,14 @@ export class AuthService {
             console.log('Auth Service: login error', error);
             return { isValid: false, message: error.message }; // return error object when there's an error
         });
-  }
+}
 
-  signupUser(user: any): Promise<any> {
+signupUser(user: any): Promise<any> {
     return this.afAuth.createUserWithEmailAndPassword(user.email, user.password)
         .then((result) => {
+            if (result.user) {
+                this.userId = result.user.uid; // Set userId here
+            }
             return result.user?.updateProfile({
                 displayName: user.name
             });
@@ -53,9 +61,9 @@ export class AuthService {
     }
 
 
-    // async getUserName(): Promise<string | null> {
-    //     const user = await this.afAuth.currentUser;
-    //     return user ? user.displayName : null;
-    // }
+    async getUserEmail(): Promise<string | null> {
+        const user = await this.afAuth.currentUser;
+        return user ? user.email : null;
+    }
   
 }

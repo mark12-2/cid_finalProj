@@ -1,12 +1,14 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Post } from '../post.model';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
 
-  // constructor() { }
+  constructor( private http: HttpClient, private authService: AuthService ) { }
 
   listChangeEvent: EventEmitter<Post[]> = new EventEmitter();
     listofPosts: Post[]=[
@@ -21,9 +23,12 @@ export class PostService {
     deleteButton(index: number){
         this.listofPosts.splice(index, 1);
     }
+
     addPost(post: Post){
-        this.listofPosts.push(post);
+    post.ownerId = this.authService.userId; 
+    this.listofPosts.push(post);
     }
+
     updatePost(index: number, post: Post ){
         this.listofPosts[index] = post;
     }
