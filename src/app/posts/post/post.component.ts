@@ -22,11 +22,15 @@ export class PostComponent implements OnInit{
     }
    
     ngOnInit(): void{
-        console.log(this.post);
+      console.log('PostComponent post:', this.post);
     }
-    delete(){
-      this.backEndService.deleteData(this.index);
+
+    delete() {
+      if (this.post) {
+        this.backEndService.deleteData(this.post.postId);
+      }
     }
+
     onEdit(){
       this.router.navigate(['/post-edit', this.index]);
     }

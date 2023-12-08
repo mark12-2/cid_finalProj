@@ -14,7 +14,11 @@ import { Post } from 'src/app/post.model';
 
 export class PostEditComponent {
   //identifiers
-  form!: FormGroup;
+  form = new FormGroup({
+    title: new FormControl('', [Validators.required]),
+    imgPath: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required])
+  });
   index: number = 0;
   editMode = false;
   
@@ -22,52 +26,46 @@ export class PostEditComponent {
     private actRoute: ActivatedRoute, private backEndService: BackEndService,
     private authService: AuthService){}
 
-  ngOnInit(): void{
+  ngOnInit(): void {
+    this.actRoute.params.subscribe((params: Params) => {
+      if(params['index']){
+        console.log(params['index']);
+        this.index = params['index'];
+        
+        const post = this.postService.getSpecPost(this.index);
+        
+        this.editMode = true;
 
-    // identifier for parameters
-let editTitle = "";
-let editDescription = "";
-let editImgPath = "";
-
-      this.actRoute.params.subscribe((params: Params) => {
-         if(params['index']){
-          console.log(params['index']);
-          this.index = params['index'];
-         
-          const post = this.postService.getSpecPost(this.index);
-
-          editTitle = post.title;
-          editDescription = post.description;
-          editImgPath = post.imgPath;
-          
-          this.editMode = true;
-
-        }
+        this.form.setValue({
+          title: post.title,
+          imgPath: post.imgPath,
+          description: post.description
+        });
       }
-      );
-
-    this.form = new FormGroup({
-      title: new FormControl(editTitle, [Validators.required]),
-      imgPath: new FormControl(editImgPath, [Validators.required]),
-      description: new FormControl(editDescription, [Validators.required])
-     })
-    }
+    });
+  }
 
   //submit function  
   async onsubmit(){
-    const title = this.form.value.title;
-    const imgPath = this.form.value.imgPath;
-    const description = this.form.value.description;
+    const title = this.form.value.title ?? '';
+    const imgPath = this.form.value.imgPath ?? '';
+    const description = this.form.value.description ?? '';
     const ownerId = (await this.authService.getUserId()) || 'defaultOwnerId';
     const userEmail = (await this.authService.getUserEmail()) || 'default@email.com';
   
-    const post: Post = new Post(
-      title, imgPath, description, new Date(), 0, [], ownerId, userEmail
-    );
+    let post: Post;
+    if (this.editMode) {
+      post = this.postService.getSpecPost(this.index);
+      post.title = title;
+      post.imgPath = imgPath;
+      post.description = description;
+    } else {
+      post = new Post(title, imgPath, description, new Date(), 0, [], ownerId, userEmail);
+    }
   
-    if(this.editMode == true) {
+    if(this.editMode) {
       this.postService.updatePost(this.index, post);
-      this.backEndService.updateData(this.index, post);
+      this.backEndService.updateData(post.postId, post);
     } else {
       this.postService.addPost(post);
       this.backEndService.saveData(post);
@@ -75,5 +73,4 @@ let editImgPath = "";
   
     this.route.navigate(['post-list']);
   }
-
 }

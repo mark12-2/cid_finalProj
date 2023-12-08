@@ -1,4 +1,6 @@
-export class Post{
+export class Post {
+    public postId: string;
+
     constructor(
         public title: string, 
         public imgPath: string,
@@ -9,5 +11,10 @@ export class Post{
         public ownerId: string,
         public userEmail: string
     ){             
+        this.postId = this.generateId();
     }
-} 
+
+    private generateId(): string {
+        return Math.random().toString(36).substr(2, 9);
+    }
+}

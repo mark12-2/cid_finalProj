@@ -10,7 +10,12 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 export class HomeComponent {
   constructor(public afAuth: AngularFireAuth) {}
 
-  logout(): void {
-    this.afAuth.signOut();
+  async logout(): Promise<void> {
+    try {
+      await this.afAuth.signOut();
+      console.log('Logged out successfully');
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    }
   }
 }

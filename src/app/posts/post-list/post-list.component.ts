@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { BackEndService } from 'src/app/data/back-end.service';
 import { PostService } from 'src/app/data/post.service';
 import { Post } from 'src/app/post.model';
@@ -10,18 +10,22 @@ import { Post } from 'src/app/post.model';
 })
 
 export class PostListComponent implements OnInit{
-  index = 0;
-  listofPosts: Post[]=[];
-   
+  listofPosts: Post[] = [];
 
-constructor(private backEndService: BackEndService, private postService: PostService ) {}
+  constructor(private backEndService: BackEndService, private postService: PostService, private ngZone: NgZone ) {}
 
-ngOnInit() {
-  this.listofPosts = this.postService.getPost();
-  this.backEndService.fetchData().subscribe((posts) => { 
-  this.listofPosts = posts;
-  });
-}
+  ngOnInit() {
+    this.listofPosts = this.postService.getPost();
+
+    this.backEndService.fetchData().subscribe((posts) => { 
+      this.ngZone.run(() => {
+        this.listofPosts = posts;
+        console.log('listofPosts:', this.listofPosts);
+      });
+    });
+  }
+
+
 }
 
 

@@ -8,8 +8,10 @@ import { AuthService } from '../auth/services/auth.service';
 })
 export class PostService {
 
-  constructor( private http: HttpClient, private authService: AuthService ) { }
-
+    constructor(private http: HttpClient, private authService: AuthService) {
+        console.log('PostService AuthService:', authService);
+      }
+      
   listChangeEvent: EventEmitter<Post[]> = new EventEmitter();
     listofPosts: Post[]=[
         // new Post("Tech Crunch", "https://www.allthingsdogs.com/wp-content/uploads/2019/10/Long-Haired-Dachshund-What-To-Know-About-This-Stunning-Dachshund-Cover.jpg",
@@ -20,21 +22,31 @@ export class PostService {
     getPost(){
         return this.listofPosts;
     }
-    deleteButton(index: number){
-        this.listofPosts.splice(index, 1);
+
+    deleteButton(postId: string){
+        const index = this.listofPosts.findIndex(post => post.postId === postId);
+        if (index > -1) {
+            this.listofPosts.splice(index, 1);
+        }
     }
 
     addPost(post: Post){
-    post.ownerId = this.authService.userId; 
-    this.listofPosts.push(post);
-    }
+        console.log('AuthService userId:', this.authService.userId);
+        post.ownerId = this.authService.userId; 
+        this.listofPosts.push(post);
+        this.listChangeEvent.emit(this.listofPosts);
+      }
 
     updatePost(index: number, post: Post ){
         this.listofPosts[index] = post;
-    }
-    getSpecPost(index: number){
+        this.listChangeEvent.emit(this.listofPosts);
+      }
+
+      getSpecPost(index: number){
+        console.log('getSpecPost index:', index, 'post:', this.listofPosts[index]);
         return this.listofPosts[index];
-    }
+      }
+    
     likePost(index: number){
         this.listofPosts[index].numberOfLikes++;
         this.listChangeEvent.emit(this.listofPosts);
@@ -49,7 +61,8 @@ export class PostService {
 
     setPosts(listsOfPosts:Post[]){
         this.listofPosts = listsOfPosts;
-        this.listChangeEvent.emit(listsOfPosts);   
-       }
+        console.log('PostService listofPosts:', this.listofPosts);
+        this.listChangeEvent.emit(this.listofPosts);   
+    }
     
 }
