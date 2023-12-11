@@ -26,24 +26,26 @@ export class PostEditComponent {
     private actRoute: ActivatedRoute, private backEndService: BackEndService,
     private authService: AuthService){}
 
-  ngOnInit(): void {
-    this.actRoute.params.subscribe((params: Params) => {
-      if(params['index']){
-        console.log(params['index']);
-        this.index = params['index'];
-        
-        const post = this.postService.getSpecPost(this.index);
-        
-        this.editMode = true;
-
-        this.form.setValue({
-          title: post.title,
-          imgPath: post.imgPath,
-          description: post.description
-        });
-      }
-    });
-  }
+    ngOnInit(): void {
+      this.actRoute.params.subscribe((params: Params) => {
+        if(params['index']){
+          console.log(params['index']);
+          this.index = params['index'];
+          
+          const post = this.postService.getSpecPost(this.index);
+          
+          if (post) {
+            this.editMode = true;
+    
+            this.form.setValue({
+              title: post.title,
+              imgPath: post.imgPath,
+              description: post.description
+            });
+          }
+        }
+      });
+    }
 
   //submit function  
   async onsubmit(){
