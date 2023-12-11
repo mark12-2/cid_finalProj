@@ -18,11 +18,11 @@ export class PostListComponent implements OnInit{
     this.listofPosts = this.postService.getPost();
 
     this.backEndService.fetchData().subscribe((posts) => { 
-      this.ngZone.run(() => {
+     
         this.listofPosts = posts;
-        console.log('listofPosts:', this.listofPosts);
+
       });
-    });
+    
   }
 
 
