@@ -49,7 +49,10 @@ export class BackEndService {
     this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, updatedPost)
       .subscribe(response => {
           console.log(response);
-          this.postService.updatePost(parseInt(postId), updatedPost);
+          this.postService.updatePost(Number(postId), updatedPost);
+          this.fetchData().subscribe((posts) => { 
+              this.postService.setPosts(posts);
+          });
       });
   }
 
