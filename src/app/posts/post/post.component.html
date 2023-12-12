@@ -21,6 +21,5 @@
       <button class="btn btn-secondary" (click)="addAComment(commentText)">Comment</button>
     </div>
 
-<button class="btn btn-primary" (click)="onEdit()">Edit</button>&nbsp;|&nbsp;
-<button class="btn btn-danger" (click)="delete()"> Delete</button> <br><br><br>
-
+    <button class="btn btn-primary" *ngIf="currentUser === post?.userEmail" (click)="onEdit()">Edit</button>&nbsp;|&nbsp;
+    <button class="btn btn-danger" *ngIf="currentUser === post?.userEmail" (click)="delete()"> Delete</button> <br><br><br>

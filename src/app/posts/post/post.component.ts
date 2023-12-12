@@ -15,14 +15,16 @@ export class PostComponent implements OnInit{
   @Input() index: number = 0;
   @Input() post?: Post;
     commentText: any;
+    currentUser: string | null = null;
     
     constructor(private postService: PostService, private router: Router, 
       private backEndService: BackEndService, private authService: AuthService){
   
     }
    
-    ngOnInit(): void{
+    async ngOnInit(): Promise<void>{
       console.log('PostComponent post:', this.post);
+      this.currentUser = await this.authService.getUserEmail();
     }
 
     delete() {
