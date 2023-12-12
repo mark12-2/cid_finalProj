@@ -39,29 +39,19 @@ export class PostComponent implements OnInit{
     
 
     // user restrictions in other functions if not logged in
-      addAComment(commentText: string){
-        if(commentText.trim() !== ''){
-          this.backEndService.addComment(this.index, commentText);
+    addAComment(commentText: string){
+      if(commentText.trim() !== '' && this.post){
+          this.backEndService.addComment(this.post.postId, commentText);
           this.commentText = '';
-        }
       }
-  
-  
+  }
+
+
       onClick() {
-          if (!this.authService.userLoggedIn) {
-              alert('You must be logged in to like a post.');
-              return;
-          }
-          this.postService.likePost(this.index)
-      }
-
-
-
-
-
-    // onClick() {
-    //   this.postService.likePost(this.index)
-    //   }
+        if (this.post) {
+            this.postService.likePost(this.post.postId);
+        }
+    }
     
     //   //comment part func
     //   addAComment(commentText: string){

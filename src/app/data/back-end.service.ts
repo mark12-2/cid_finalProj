@@ -31,8 +31,9 @@ export class BackEndService {
       const postsArray: Post[] = [];
       for (const key in responseData) {
         if (responseData.hasOwnProperty(key)) {
-          let newPost = new Post(responseData[key].title, responseData[key].imgPath, responseData[key].description, responseData[key].dateCreated, responseData[key].numberOfLikes, responseData[key].comments, responseData[key].ownerId, responseData[key].userEmail);
+          let newPost = new Post(responseData[key].title, responseData[key].imgPath, responseData[key].description, responseData[key].dateCreated, responseData[key].numberOfLikes, responseData[key].ownerId, responseData[key].userEmail);
           newPost.postId = key;
+          newPost.comments = responseData[key].comments; 
           postsArray.push(newPost);
         }
       }
@@ -73,18 +74,25 @@ export class BackEndService {
 
 
   //comment push to firebase 
-  addComment(index: number, comment: string) {
-    const post = this.postService.getSpecPost(index);
-    if (!post.comments) {
-        post.comments = [];
+  async addComment(postId: string, commentText: string) {
+    const userEmail = await this.authService.getUserEmail();
+    if (userEmail) { // Check if userEmail is not null
+        const comment = { text: commentText, userEmail: userEmail };
+        const post = this.postService.listofPosts.find(post => post.postId === postId);
+        if (post && !post.comments) {
+            post.comments = [];
+        }
+        if (post) {
+            post.comments.push(comment);
+            this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, post)
+                .subscribe(response => {
+                    console.log(response);
+                });
+        }
     }
-    post.comments.push(comment);
-    this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${index}.json`, post)
-      .subscribe(response => {
-        console.log(response);
-      });
+}
 }
 
 
 
-}
+

@@ -18,6 +18,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { AngularFireModule } from '@angular/fire/compat';
 import { HttpClientModule } from '@angular/common/http';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { HttpClientModule } from '@angular/common/http';
     HeaderComponent,
     LoginComponent,
     SignupComponent,
-    HomeComponent
+    HomeComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

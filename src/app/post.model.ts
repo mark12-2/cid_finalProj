@@ -1,5 +1,7 @@
 export class Post {
     public postId: string;
+    public likes: string[]=[];
+    public comments: { text: string, userEmail: string }[]=[];
 
     constructor(
         public title: string, 
@@ -7,7 +9,6 @@ export class Post {
         public description: string,
         public dateCreated: Date,
         public numberOfLikes: number,
-        public comments: string[]=[],
         public ownerId: string,
         public userEmail: string
     ){             
@@ -18,4 +19,3 @@ export class Post {
         return Math.random().toString(36).substr(2, 9);
     }
 }
-

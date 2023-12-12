@@ -62,7 +62,7 @@ export class PostEditComponent {
       post.imgPath = imgPath;
       post.description = description;
     } else {
-      post = new Post(title, imgPath, description, new Date(), 0, [], ownerId, userEmail);
+      post = new Post(title, imgPath, description, new Date(), 0, ownerId, userEmail);
     }
   
     if(this.editMode) {

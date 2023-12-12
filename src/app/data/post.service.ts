@@ -47,16 +47,38 @@ export class PostService {
         return this.listofPosts[index];
       }
     
-    likePost(index: number){
-        this.listofPosts[index].numberOfLikes++;
-        this.listChangeEvent.emit(this.listofPosts);
+    // liking a post with specific user
+      async likePost(postId: string) {
+        console.log('likePost method called with postId:', postId);
+        const userEmail = await this.authService.getUserEmail();
+        const post = this.listofPosts.find(post => post.postId === postId);
+    
+        if (post && userEmail) { // Check if post and userEmail are not null
+            if (!post.likes) {
+                post.likes = [];
+            }
+    
+            if (post.likes.includes(userEmail)) {
+                // User has already liked this post, so "unlike" it
+                post.likes = post.likes.filter(email => email !== userEmail);
+            } else {
+                // User has not liked this post yet, so "like" it
+                post.likes.push(userEmail);
+            }
+    
+            // Update the number of likes
+            post.numberOfLikes = post.likes.length;
+            console.log('Post after update:', post);
+            
+        }
     }
     
-    addComment(index: number, comment: string) {
+    // commenting stuff
+    addComment(index: number, comment: string, userEmail: string) {
         if (!this.listofPosts[index].comments) {
             this.listofPosts[index].comments = [];
         }
-        this.listofPosts[index].comments.push(comment);
+        this.listofPosts[index].comments.push({ text: comment, userEmail: userEmail });
     }
 
     setPosts(listsOfPosts:Post[]){

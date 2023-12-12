@@ -1,5 +1,8 @@
+<app-sidebar></app-sidebar>
+<div style="position: relative; margin-left: 320px;">
 <app-post *ngFor = "let post of listofPosts; let i = index"
     [post]="post"
     [index]="i"
  ></app-post>
  <br><br>
+</div>
