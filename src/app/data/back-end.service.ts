@@ -48,14 +48,17 @@ export class BackEndService {
   //updating the data 
   updateData(postId: string, updatedPost: Post) {
     this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, updatedPost)
-      .subscribe(response => {
-          console.log(response);
-          this.postService.updatePost(Number(postId), updatedPost);
-          this.fetchData().subscribe((posts) => { 
-              this.postService.setPosts(posts);
-          });
-      });
-  }
+        .subscribe(response => {
+            console.log(response);
+            const index = this.postService.listofPosts.findIndex(post => post.postId === postId);
+            if (index !== -1) {
+                this.postService.listofPosts[index] = updatedPost;
+            }
+            this.fetchData().subscribe((posts) => { 
+                this.postService.setPosts(posts);
+            });
+        });
+}
 
 
   //deleting data from firebase
