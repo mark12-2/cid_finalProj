@@ -25,7 +25,13 @@ export class PostListComponent implements OnInit{
     
   }
 
-
+  filterPosts(searchTerm: string): void {
+    if (searchTerm) {
+      this.listofPosts = this.listofPosts.filter(post => post.title.includes(searchTerm));
+    } else {
+      this.listofPosts = this.postService.getPost();
+    }
+  }
 }
 
 

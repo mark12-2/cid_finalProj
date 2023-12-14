@@ -16,6 +16,7 @@ export class PostComponent implements OnInit{
   @Input() post?: Post;
     commentText: any;
     currentUser: string | null = null;
+    showPopup = false;
     
     constructor(private postService: PostService, private router: Router, 
       private backEndService: BackEndService, private authService: AuthService){
@@ -49,17 +50,14 @@ export class PostComponent implements OnInit{
 
       onClick() {
         if (this.post) {
-            this.postService.likePost(this.post.postId);
+            this.backEndService.likePost(this.post.postId);
         }
     }
     
-    //   //comment part func
-    //   addAComment(commentText: string){
-    //     if(commentText.trim() !== ''){
-    //       this.backEndService.addComment(this.index, commentText);
-    //       this.commentText = '';
-    //     }
-    //   }
+    togglePopup(): void {
+      this.showPopup = !this.showPopup;
+    }
+  
   
   }
   

@@ -19,6 +19,7 @@ import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { AngularFireModule } from '@angular/fire/compat';
 import { HttpClientModule } from '@angular/common/http';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     LoginComponent,
     SignupComponent,
     HomeComponent,
-    SidebarComponent
+    SidebarComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

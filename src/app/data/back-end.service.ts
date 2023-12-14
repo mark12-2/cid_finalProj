@@ -75,25 +75,57 @@ export class BackEndService {
     }
   }
 
-
   //comment push to firebase 
-  async addComment(postId: string, commentText: string) {
-    const userEmail = await this.authService.getUserEmail();
-    if (userEmail) { // Check if userEmail is not null
-        const comment = { text: commentText, userEmail: userEmail };
-        const post = this.postService.listofPosts.find(post => post.postId === postId);
-        if (post && !post.comments) {
-            post.comments = [];
-        }
-        if (post) {
-            post.comments.push(comment);
-            this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, post)
-                .subscribe(response => {
-                    console.log(response);
-                });
-        }
-    }
-}
+    async addComment(postId: string, commentText: string) {
+      const userEmail = await this.authService.getUserEmail();
+      if (userEmail) {
+          const comment = { text: commentText, userEmail: userEmail };
+          const post = this.postService.listofPosts.find(post => post.postId === postId);
+          if (post && !post.comments) {
+              post.comments = [];
+          }
+          if (post) {
+              post.comments.push(comment);
+              this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, post)
+                  .subscribe(response => {
+                      console.log(response);
+                  });
+          }
+      }
+  }
+
+  // like function for liking a post
+  async likePost(postId: string) {
+      console.log('likePost method called with postId:', postId);
+      const userEmail = await this.authService.getUserEmail();
+      const post = this.postService.listofPosts.find(post => post.postId === postId);
+
+      if (post && userEmail) { 
+          if (!post.likes) {
+              post.likes = [];
+          }
+
+          if (post.likes.includes(userEmail)) {
+              const index = post.likes.indexOf(userEmail);
+              if (index > -1) {
+                  post.likes.splice(index, 1);
+              }
+          } else {
+              post.likes.push(userEmail);
+          }
+          post.numberOfLikes = post.likes.length;
+
+          this.updatePostLikes(postId, post);
+      }
+  }
+
+  updatePostLikes(postId: string, updatedPost: Post) {
+    this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, updatedPost)
+        .subscribe(response => {
+            console.log(response);
+        });
+  }
+
 }
 
 

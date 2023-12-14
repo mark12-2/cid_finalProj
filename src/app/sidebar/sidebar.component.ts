@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class SidebarComponent implements OnInit {
   currentUserEmail: string | null = null;
 
-  constructor(private authService: AuthService, public afAuth: AngularFireAuth, private router: Router) { }
+  constructor(private authService: AuthService, public afAuth: AngularFireAuth, public router: Router) { }
 
   async ngOnInit(): Promise<void> {
     this.currentUserEmail = await this.authService.getUserEmail();

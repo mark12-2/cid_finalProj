@@ -17,7 +17,7 @@ export class HeaderComponent {
   }
 
   async logout(): Promise<void> {
-      try {
+      try { 
         await this.afAuth.signOut();
         console.log('Logged out successfully');
         this.router.navigate(['/login']);

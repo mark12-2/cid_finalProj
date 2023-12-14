@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AuthService } from '../auth/services/auth.service';
+import { BackEndService } from '../data/back-end.service';
+import { Post } from '../post.model';
 
 
 @Component({
@@ -7,15 +9,18 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  constructor(public afAuth: AngularFireAuth) {}
 
-  async logout(): Promise<void> {
-    try {
-      await this.afAuth.signOut();
-      console.log('Logged out successfully');
-    } catch (error) {
-      console.error('Error during sign out:', error);
-    }
-  }
+export class HomeComponent {
+
+  listofPosts: Post[] = [];
+
+  constructor(public authService: AuthService, public backEndService: BackEndService) {}
+
+  async ngOnInit() {
+    const userEmail = await this.authService.getUserEmail();
+    this.backEndService.fetchData().subscribe((posts) => { 
+        this.listofPosts = posts.filter(post => post.userEmail === userEmail);
+    });
+}
+
 }
