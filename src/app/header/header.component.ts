@@ -17,13 +17,14 @@ export class HeaderComponent {
   }
 
   async logout(): Promise<void> {
-      try { 
-        await this.afAuth.signOut();
-        console.log('Logged out successfully');
-        this.router.navigate(['/login']);
-      } catch (error) {
-        console.error('Error during sign out:', error);
-      }
+    try { 
+      await this.afAuth.signOut();
+      this.authService.userLoggedIn.next(false); 
+      console.log('Logged out successfully');
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error during sign out:', error);
     }
+  }
 
 }
