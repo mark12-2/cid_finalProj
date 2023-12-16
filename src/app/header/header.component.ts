@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../auth/services/auth.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
+import { Post } from '../post.model';
 
 @Component({
   selector: 'app-header',
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  originalPosts: Post[] = [];
 
   constructor(private authService: AuthService, public afAuth: AngularFireAuth, private router: Router) { }
 
@@ -26,5 +28,6 @@ export class HeaderComponent {
       console.error('Error during sign out:', error);
     }
   }
+  
 
 }

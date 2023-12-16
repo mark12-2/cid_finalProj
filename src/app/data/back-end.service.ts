@@ -103,15 +103,12 @@ export class BackEndService {
     if (!userEmail) {
       return;
     }
-  
-    // Fetch the post from Firebase first
     this.http.get<Post>(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`)
       .subscribe(post => {
         if (post) {
           if (!post.likes) {
             post.likes = [];
-          }
-  
+          } 
           if (post.likes.includes(userEmail)) {
             const index = post.likes.indexOf(userEmail);
             if (index > -1) {
@@ -119,10 +116,8 @@ export class BackEndService {
             }
           } else {
             post.likes.push(userEmail);
-          }
-  
+          } 
           post.numberOfLikes = post.likes.length;
-
           this.http.patch(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, {likes: post.likes, numberOfLikes: post.numberOfLikes})
             .subscribe(response => {
               console.log(response);
