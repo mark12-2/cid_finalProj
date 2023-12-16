@@ -1,0 +1,30 @@
+<style>
+    .container {
+    display: flex;
+    position: absolute; 
+    left: 50%; transform: translate(-50%);
+  }
+  
+  .sidebar {
+    width: 200px;
+    padding: 20px;
+    
+  }
+
+  .user-info{
+    width: 210px;
+    padding: 8px;
+    background-color: #f4f4f4;
+  }
+  </style>
+  
+  <div class="container">
+    <div class="sidebar">
+      <div class="user-info" >
+        <p><b>Logged in as:</b></p>
+        <a href="/home" style="color: black; text-decoration: none; font-style: italic;font-size: 18px;">{{ currentUserEmail }}</a>
+      </div><br><br>
+      <a routerLink="/home" class="btn btn-primary">Profile</a><br><br>
+      <a routerLink="/post-add" class="btn btn-secondary">Create Post</a>
+    </div>
+</div>

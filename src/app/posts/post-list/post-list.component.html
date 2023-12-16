@@ -1,0 +1,8 @@
+<app-sidebar></app-sidebar>
+<app-search (search)="filterPosts($event)"></app-search>
+ <div style="position: absolute; left: 50%; transform: translate(-40%);">
+    <h1>Pet's Feed</h1><hr><br><br>
+    <app-post *ngFor="let post of listofPosts; let i = index" [post]="post" [index]="i"></app-post>
+    <br><br>
+  </div>
+  
