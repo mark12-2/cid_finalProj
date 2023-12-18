@@ -13,4 +13,10 @@ export class SearchComponent {
   onSearch(): void {
     this.search.emit(this.searchTerm);
   }
+
+  cancelSearch(): void {
+    this.searchTerm = '';
+    this.search.emit(this.searchTerm);
+  }
+  
 }

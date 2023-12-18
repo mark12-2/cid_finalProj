@@ -11,15 +11,18 @@ import { Post } from 'src/app/post.model';
 
 export class PostListComponent implements OnInit{
   listofPosts: Post[] = [];
+  originalPosts: Post[] = [];
 
   constructor(private backEndService: BackEndService, private postService: PostService, private ngZone: NgZone ) {}
 
   ngOnInit() {
-    this.listofPosts = this.postService.getPost();
+    this.originalPosts = this.postService.getPost();
+    this.listofPosts = [...this.originalPosts];
 
-    this.backEndService.fetchData().subscribe((posts) => { 
-     
-        this.listofPosts = posts;
+    this.backEndService.fetchData().subscribe((posts) => {  
+      
+        this.originalPosts = posts;
+        this.listofPosts = [...this.originalPosts];
 
       });
     
@@ -27,11 +30,15 @@ export class PostListComponent implements OnInit{
 
   filterPosts(searchTerm: string): void {
     if (searchTerm) {
-      this.listofPosts = this.listofPosts.filter(post => post.title.includes(searchTerm));
+      this.listofPosts = this.originalPosts.filter(post => 
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     } else {
-      this.listofPosts = this.postService.getPost();
+      this.listofPosts = [...this.originalPosts];
     }
   }
+  
 }
 
 

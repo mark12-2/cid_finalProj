@@ -96,35 +96,41 @@ export class BackEndService {
 
   // like function for liking a post
   async likePost(postId: string) {
-      console.log('likePost method called with postId:', postId);
-      const userEmail = await this.authService.getUserEmail();
-      const post = this.postService.listofPosts.find(post => post.postId === postId);
-
-      if (post && userEmail) { 
+    console.log('likePost method called with postId:', postId);
+  
+    const userEmail = await this.authService.getUserEmail();
+  
+    if (!userEmail) {
+      return;
+    }
+    this.http.get<Post>(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`)
+      .subscribe(post => {
+        if (post) {
           if (!post.likes) {
-              post.likes = [];
-          }
-
+            post.likes = [];
+          } 
           if (post.likes.includes(userEmail)) {
-              const index = post.likes.indexOf(userEmail);
-              if (index > -1) {
-                  post.likes.splice(index, 1);
-              }
+            const index = post.likes.indexOf(userEmail);
+            if (index > -1) {
+              post.likes.splice(index, 1);
+            }
           } else {
-              post.likes.push(userEmail);
-          }
+            post.likes.push(userEmail);
+          } 
           post.numberOfLikes = post.likes.length;
-
-          this.updatePostLikes(postId, post);
-      }
+          this.http.patch(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, {likes: post.likes, numberOfLikes: post.numberOfLikes})
+            .subscribe(response => {
+              console.log(response);
+              const localPostIndex = this.postService.listofPosts.findIndex(localPost => localPost.postId === postId);
+              if (localPostIndex !== -1) {
+                this.postService.listofPosts[localPostIndex].likes = post.likes;
+                this.postService.listofPosts[localPostIndex].numberOfLikes = post.numberOfLikes;
+              }
+            });
+        }
+      });
   }
-
-  updatePostLikes(postId: string, updatedPost: Post) {
-    this.http.put(`https://crud-app-f0d6e-default-rtdb.asia-southeast1.firebasedatabase.app/posts/${postId}.json`, updatedPost)
-        .subscribe(response => {
-            console.log(response);
-        });
-  }
+  
 
 }
 
